@@ -44,7 +44,7 @@ class Shape(object):
         a += angle * ((sides - 1) / 2)
         return Shape(sides, x, y, a, **kwargs)
     def render(self, dc):
-        points = self.points(margin=0.2)
+        points = self.points(margin=0.25)
         dc.move_to(*points[0])
         for point in points[1:]:
             dc.line_to(*point)
@@ -107,17 +107,27 @@ class Model(object):
 
 def main():
     width = height = 1024
-    scale = 48
+    scale = 64
     surface = cairo.ImageSurface(cairo.FORMAT_RGB24, width, height)
     dc = cairo.Context(surface)
     dc.set_line_cap(cairo.LINE_CAP_ROUND)
     dc.set_line_join(cairo.LINE_JOIN_ROUND)
-    dc.set_line_width(3.0 / scale)
+    dc.set_line_width(0.125)
     dc.set_font_size(10.0 / scale)
     dc.translate(width / 2, height / 2)
     dc.scale(scale, scale)
     dc.set_source_rgb(0, 0, 0)
     dc.paint()
+
+    # model = Model()
+    # model.append(Shape(12, color=COLORS[2]))
+    # for i in range(12):
+    #     model.add(0, i, 3 + i % 2)
+    # for i in range(6):
+    #     model.add(2 + i * 2, 2, 12, color=COLORS[2])
+    #     model.add(2 + i * 2, 1, 3)
+    #     model.add(2 + i * 2, 3, 3)
+    # model.recursive_render(dc, range(13, 29, 3), 5)
 
     # model = Model()
     # model.append(Shape(8, color=COLORS[2]))
@@ -128,16 +138,16 @@ def main():
     # model.recursive_render(dc, range(5, 9), 5)
 
     model = Model()
-    model.append(Shape(6, color=COLORS[0]))
+    model.append(Shape(6, color=COLORS[2]))
     for i in range(6):
         model.add(0, i, 4)
     for i in range(6):
-        model.add(i + 1, 1, 3, color=COLORS[2])
+        model.add(i + 1, 1, 3, color=COLORS[3])
     for i in range(6):
         model.add(i + 7, 2, 4)
     for i in range(6):
-        model.add(i + 13, 3, 6, color=COLORS[0])
-    model.recursive_render(dc, range(19, 25), 6)
+        model.add(i + 13, 3, 6, color=COLORS[2])
+    model.recursive_render(dc, range(19, 25), 4)
 
     # model = Model()
     # model.append(Shape(6, color=COLORS[0]))
