@@ -215,6 +215,13 @@ def main():
         d = model.add_all(c, [2], 4)
         model.recursive_render(dc, d)
 
+    if pattern == 8:
+        model = Model()
+        model.append(Shape(3))
+        a = model.add_all([0], range(3), 3)
+        b = model.add_all(a, [1, 2], 3)
+        model.recursive_render(dc, b)
+
     surface.write_to_png('output.png')
 
 if __name__ == '__main__':
