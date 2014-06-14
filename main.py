@@ -137,7 +137,7 @@ class Model(object):
                 break
             depth += 1
 
-def main():
+def main(pattern):
     surface = cairo.ImageSurface(cairo.FORMAT_RGB24, SIZE, SIZE)
     dc = cairo.Context(surface)
     dc.set_line_cap(cairo.LINE_CAP_ROUND)
@@ -148,8 +148,6 @@ def main():
     dc.scale(SCALE, SCALE)
     dc.set_source_rgb(*color(BACKGROUND_COLOR))
     dc.paint()
-
-    pattern = 6
 
     if pattern == 0: # 3.6.3.6
         model = Model()
@@ -245,7 +243,14 @@ def main():
         model.add_all(c, [1], 3)
         model.recursive_render(dc, e)
 
+    if pattern == 11:
+        model = Model()
+        model.append(Shape(8))
+        a = model.add_all([0], range(0, 8, 2), 6)
+        b = model.add_all(a, [3], 8)
+        model.recursive_render(dc, b)
+
     surface.write_to_png('output.png')
 
 if __name__ == '__main__':
-    main()
+    main(6)
