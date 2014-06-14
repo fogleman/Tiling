@@ -6,6 +6,12 @@ Scroll down for a tutorial. Here are some examples.
 
 ![Sample](http://i.imgur.com/VgkrtDb.gif)
 
+### Links
+
+http://en.wikipedia.org/wiki/Tiling_by_regular_polygons
+
+http://en.wikipedia.org/wiki/List_of_uniform_tilings
+
 ### How To
 
 Before creating a new pattern, set these flags to make it easier.
