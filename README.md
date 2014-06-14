@@ -32,7 +32,7 @@ At this point we can run the following code to render the model.
 
     model.render(dc)
 
-![Image](http://i.imgur.com/BF9AZDw.png)
+![Image](http://i.imgur.com/OjV0HTb.png)
 
 Now, let's add squares adjacent to all of the hexagon's edges.
 
@@ -52,7 +52,7 @@ this case, squares.
 The return value of `add_all` tracks the indexes of the newly created squares
 so we can refer to them later.
 
-![Image](http://i.imgur.com/DwFKcL7.png)
+![Image](http://i.imgur.com/D0zqHkA.png)
 
 Next comes the cool part. We can attach triangles to all of the squares we just
 created in one fell swoop by using the previous return value. Here, we are
@@ -60,14 +60,14 @@ adding triangles to edge number 1 of each of those squares.
 
     b = model.add_all(a, [1], 3)
 
-![Image](http://i.imgur.com/lkgFqrN.png)
+![Image](http://i.imgur.com/lfyfaC0.png)
 
 Now we'll add more hexagons which will represent the repeating positions of
 our template.
 
     c = model.add_all(a, [2], 6)
 
-![Image](http://i.imgur.com/8mHYBoo.png)
+![Image](http://i.imgur.com/2HgeMRd.png)
 
 Now that we have positions for repeating the pattern, we can use the
 recursive_render function to automatically fill in the rest of the surface
@@ -75,7 +75,7 @@ with our pattern.
 
     model.recursive_render(dc, c)
 
-![Image](http://i.imgur.com/vh2oQKB.png)
+![Image](http://i.imgur.com/JC2MSwH.png)
 
 Here's all the code needed for this pattern:
 
@@ -89,4 +89,4 @@ Here's all the code needed for this pattern:
 Once finished, you can turn off the helper labels and adjust the scale as
 desired.
 
-![Image](http://i.imgur.com/RETztFc.png)
+![Image](http://i.imgur.com/cOrQsXW.png)
