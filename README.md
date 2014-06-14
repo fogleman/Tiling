@@ -1,3 +1,3 @@
 ## Tiling
 
-![Sample](http://i.imgur.com/fEJnrFV.png)
+![Sample](http://i.imgur.com/VgkrtDb.gif)
