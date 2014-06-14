@@ -63,7 +63,7 @@ class Shape(object):
             dc.stroke_preserve()
         dc.new_path()
     def render_edge_labels(self, dc):
-        points = self.points(MARGIN + 0.1)
+        points = self.points(MARGIN - 0.25)
         for edge in range(self.sides):
             (x1, y1), (x2, y2) = points[edge:edge + 2]
             text = str(edge)
@@ -101,10 +101,12 @@ class Model(object):
     def render(self, dc, x=0, y=0):
         dc.save()
         dc.translate(x, y)
+        if SHOW_LABELS:
+            for shape in self.shapes:
+                shape.render_edge_labels(dc)
         for index, shape in enumerate(self.shapes):
             shape.render(dc)
             if SHOW_LABELS:
-                shape.render_edge_labels(dc)
                 shape.render_label(dc, index)
         dc.restore()
     def _recursive_render(self, dc, indexes, x, y, depth, memo):
@@ -141,7 +143,7 @@ def main():
     dc.set_line_cap(cairo.LINE_CAP_ROUND)
     dc.set_line_join(cairo.LINE_JOIN_ROUND)
     dc.set_line_width(STROKE_WIDTH)
-    dc.set_font_size(12.0 / SCALE)
+    dc.set_font_size(18.0 / SCALE)
     dc.translate(SIZE / 2, SIZE / 2)
     dc.scale(SCALE, SCALE)
     dc.set_source_rgb(*color(BACKGROUND_COLOR))
