@@ -1,6 +1,13 @@
 from math import sin, cos, tan, pi, atan2
 import cairo
-import random
+
+DEPTH = 10
+MARGIN = 0.1
+SCALE = 32
+SHOW_LABELS = False
+SIZE = 1024
+STROKE_COLOR = 0x313E4A
+STROKE_WIDTH = 0.1
 
 COLORS = [
     0x477984,
@@ -31,7 +38,7 @@ class Shape(object):
             rotation += angle / 2
         angles = [angle * i + rotation for i in range(self.sides)]
         angles.append(angles[0])
-        d = 0.5 / sin(angle / 2) * scale - margin * sin(angle / 2)
+        d = 0.5 / sin(angle / 2) * scale - margin / cos(angle / 2)
         return [(self.x + cos(a) * d, self.y + sin(a) * d) for a in angles]
     def adjacent(self, sides, edge, **kwargs):
         (x1, y1), (x2, y2) = self.points()[edge:edge + 2]
@@ -44,16 +51,18 @@ class Shape(object):
         a += angle * ((sides - 1) / 2)
         return Shape(sides, x, y, a, **kwargs)
     def render(self, dc):
-        points = self.points(margin=0.25)
+        points = self.points(margin=MARGIN)
         dc.move_to(*points[0])
         for point in points[1:]:
             dc.line_to(*point)
         dc.set_source_rgb(*color(self.color))
         dc.fill_preserve()
-        dc.set_source_rgb(*color(0x313E4A))
-        dc.stroke()
+        if STROKE_WIDTH:
+            dc.set_source_rgb(*color(STROKE_COLOR))
+            dc.stroke_preserve()
+        dc.new_path()
     def render_edge_labels(self, dc):
-        points = self.points(margin=0.15)
+        points = self.points(margin=MARGIN + 0.1)
         for edge in range(self.sides):
             (x1, y1), (x2, y2) = points[edge:edge + 2]
             text = str(edge)
@@ -86,8 +95,9 @@ class Model(object):
         dc.translate(dx, dy)
         for index, shape in enumerate(self.shapes):
             shape.render(dc)
-            # shape.render_edge_labels(dc)
-            # shape.render_label(dc, index)
+            if SHOW_LABELS:
+                shape.render_edge_labels(dc)
+                shape.render_label(dc, index)
         dc.restore()
     def recursive_render(self, dc, indexes, depth, x=0, y=0, memo=None):
         if depth < 0:
@@ -106,59 +116,65 @@ class Model(object):
                 dc, indexes, depth - 1, x + shape.x, y + shape.y, memo)
 
 def main():
-    width = height = 1024
-    scale = 64
+    width = height = SIZE
+    scale = SCALE
     surface = cairo.ImageSurface(cairo.FORMAT_RGB24, width, height)
     dc = cairo.Context(surface)
     dc.set_line_cap(cairo.LINE_CAP_ROUND)
     dc.set_line_join(cairo.LINE_JOIN_ROUND)
-    dc.set_line_width(0.125)
-    dc.set_font_size(10.0 / scale)
+    dc.set_line_width(STROKE_WIDTH)
+    dc.set_font_size(12.0 / scale)
     dc.translate(width / 2, height / 2)
     dc.scale(scale, scale)
     dc.set_source_rgb(0, 0, 0)
     dc.paint()
 
-    # model = Model()
-    # model.append(Shape(12, color=COLORS[2]))
-    # for i in range(12):
-    #     model.add(0, i, 3 + i % 2)
-    # for i in range(6):
-    #     model.add(2 + i * 2, 2, 12, color=COLORS[2])
-    #     model.add(2 + i * 2, 1, 3)
-    #     model.add(2 + i * 2, 3, 3)
-    # model.recursive_render(dc, range(13, 29, 3), 5)
+    pattern = 3
 
-    # model = Model()
-    # model.append(Shape(8, color=COLORS[2]))
-    # for i in range(4):
-    #     model.add(0, i * 2 + 1, 4)
-    # for i in range(4):
-    #     model.add(i + 1, 1, 8, color=COLORS[2])
-    # model.recursive_render(dc, range(5, 9), 5)
+    if pattern == 1:
+        model = Model()
+        model.append(Shape(12, color=COLORS[2]))
+        for i in range(12):
+            model.add(0, i, 3 + i % 2)
+        for i in range(6):
+            model.add(2 + i * 2, 2, 12, color=COLORS[2])
+            model.add(2 + i * 2, 1, 3)
+            model.add(2 + i * 2, 3, 3)
+        model.recursive_render(dc, range(13, 29, 3), DEPTH)
 
-    model = Model()
-    model.append(Shape(6, color=COLORS[2]))
-    for i in range(6):
-        model.add(0, i, 4)
-    for i in range(6):
-        model.add(i + 1, 1, 3, color=COLORS[3])
-    for i in range(6):
-        model.add(i + 7, 2, 4)
-    for i in range(6):
-        model.add(i + 13, 3, 6, color=COLORS[2])
-    model.recursive_render(dc, range(19, 25), 4)
+    elif pattern == 2:
+        model = Model()
+        model.append(Shape(8, color=COLORS[2]))
+        for i in range(4):
+            model.add(0, i * 2 + 1, 4)
+        for i in range(4):
+            model.add(i + 1, 1, 8, color=COLORS[2])
+        model.recursive_render(dc, range(5, 9), DEPTH)
 
-    # model = Model()
-    # model.append(Shape(6, color=COLORS[0]))
-    # for i in range(6):
-    #     model.add(0, i, 3, color=COLORS[2])
-    # for i in range(6):
-    #     model.add(i + 1, 1, 3, color=COLORS[2])
-    #     model.add(i + 1, 2, 3, color=COLORS[2])
-    # for i in range(6):
-    #     model.add(i * 2 + 7, 2, 6, color=COLORS[0])
-    # model.recursive_render(dc, range(19, 25), 6)
+    elif pattern == 3:
+        model = Model()
+        model.append(Shape(6, color=COLORS[2]))
+        for i in range(6):
+            model.add(0, i, 4)
+        for i in range(6):
+            model.add(i + 1, 1, 3, color=COLORS[3])
+        for i in range(6):
+            model.add(i + 7, 2, 4)
+        for i in range(6):
+            model.add(i + 13, 3, 6, color=COLORS[2])
+        model.recursive_render(dc, range(19, 25), DEPTH)
+
+    elif pattern == 4:
+        model = Model()
+        model.append(Shape(6, color=COLORS[0]))
+        for i in range(6):
+            model.add(0, i, 3, color=COLORS[2])
+        for i in range(6):
+            model.add(i + 1, 1, 3, color=COLORS[2])
+            model.add(i + 1, 2, 3, color=COLORS[2])
+        for i in range(6):
+            model.add(i * 2 + 7, 2, 6, color=COLORS[0])
+        model.recursive_render(dc, range(19, 25), DEPTH)
 
     surface.write_to_png('output.png')
 
