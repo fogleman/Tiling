@@ -32,24 +32,25 @@ Now, let's add squares adjacent to all of the hexagon's edges.
 
     a = model.add_all([0], range(6), 4)
 
-The first parameter, [0], specifies which shapes we're attaching to. Here,
-we're only attaching to one shape and it was the first one created, so it's
-referred to by a zero.
+The first parameter, `[0]`, specifies which shapes we're attaching to. Here,
+we're only attaching to one shape (the hexagon) and it was the first one
+created, so it's referred to by zero.
 
-The second parameter, range(6), specifies the edges we're attaching to. In this
-case we want to attach to all six sides of the hexagon.
+The second parameter, `range(6)`, specifies the edges we're attaching to. In this
+case we want to attach to all six sides of the hexagon. You can see the edges
+labeled in the output image.
 
-The third parameter, 4, specifies the number of sides for the new shapes. In
+The third parameter, `4`, specifies the number of sides for the new shapes. In
 this case, squares.
 
-The return value tracks the identifiers of the newly created squares so we can
-refer to them later.
+The return value of `add_all` tracks the indexes of the newly created squares
+so we can refer to them later.
 
 ![Image](http://i.imgur.com/DwFKcL7.png)
 
 Next comes the cool part. We can attach triangles to all of the squares we just
-created by using the previous return value. Here, we are adding triangles to
-edge number 1 of each of those squares.
+created in one fell swoop by using the previous return value. Here, we are
+adding triangles to edge number 1 of each of those squares.
 
     b = model.add_all(a, [1], 3)
 
