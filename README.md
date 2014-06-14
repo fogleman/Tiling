@@ -14,7 +14,8 @@ http://en.wikipedia.org/wiki/List_of_uniform_tilings
 
 ### How To
 
-Before creating a new pattern, set these flags to make it easier.
+Before creating a new pattern, set these flags to zoom in and label the
+polygons and their edges.
 
     SCALE = 128
     SHOW_LABELS = True
