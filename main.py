@@ -91,6 +91,13 @@ class Model(object):
         parent = self.shapes[index]
         shape = parent.adjacent(sides, edge, **kwargs)
         self.append(shape)
+    def add_all(self, indexes, edges, sides, **kwargs):
+        start = len(self.shapes)
+        for index in indexes:
+            for edge in edges:
+                self.add(index, edge, sides, **kwargs)
+        end = len(self.shapes)
+        return range(start, end)
     def render(self, dc, x=0, y=0):
         dc.save()
         dc.translate(x, y)
@@ -142,50 +149,38 @@ def main():
 
     pattern = 3
 
-    if pattern == 1:
-        model = Model()
-        model.append(Shape(12, fill=0, stroke=0))
-        for i in range(12):
-            model.add(0, i, 3 + i % 2)
-        for i in range(6):
-            model.add(2 + i * 2, 2, 12, fill=0, stroke=0)
-            model.add(2 + i * 2, 1, 3)
-            model.add(2 + i * 2, 3, 3)
-        model.recursive_render(dc, range(13, 29, 3))
-
-    elif pattern == 2:
-        model = Model()
-        model.append(Shape(8, fill=RED))
-        for i in range(4):
-            model.add(0, i * 2 + 1, 4)
-        for i in range(4):
-            model.add(i + 1, 1, 8, fill=RED)
-        model.recursive_render(dc, range(5, 9))
-
-    elif pattern == 3:
+    if pattern == 0:
         model = Model()
         model.append(Shape(6, fill=RED))
-        for i in range(6):
-            model.add(0, i, 4)
-        for i in range(6):
-            model.add(i + 1, 1, 3, fill=WHITE)
-        for i in range(6):
-            model.add(i + 7, 2, 4)
-        for i in range(6):
-            model.add(i + 13, 3, 6, fill=RED)
-        model.recursive_render(dc, range(19, 25))
+        a = model.add_all([0], range(6), 3)
+        b = model.add_all(a, [1], 3)
+        c = model.add_all(a, [2], 3)
+        d = model.add_all(c, [1], 6, fill=RED)
+        model.recursive_render(dc, d)
 
-    elif pattern == 4:
+    if pattern == 1:
         model = Model()
-        model.append(Shape(6, fill=BLUE))
-        for i in range(6):
-            model.add(0, i, 3, fill=RED)
-        for i in range(6):
-            model.add(i + 1, 1, 3, fill=RED)
-            model.add(i + 1, 2, 3, fill=RED)
-        for i in range(6):
-            model.add(i * 2 + 7, 2, 6, fill=BLUE)
-        model.recursive_render(dc, range(19, 25))
+        model.append(Shape(8, fill=RED))
+        a = model.add_all([0], range(1, 8, 2), 4)
+        b = model.add_all(a, [1], 8, fill=RED)
+        model.recursive_render(dc, b)
+
+    if pattern == 2:
+        model = Model()
+        model.append(Shape(12, fill=RED))
+        a = model.add_all([0], range(0, 12, 2), 3)
+        b = model.add_all([0], range(1, 12, 2), 4)
+        c = model.add_all(b, [1, 3], 3)
+        d = model.add_all(b, [2], 12, fill=RED)
+        model.recursive_render(dc, d)
+
+    if pattern == 3:
+        model = Model()
+        model.append(Shape(6, fill=RED))
+        a = model.add_all([0], range(6), 4)
+        b = model.add_all(a, [1], 3)
+        c = model.add_all(a, [2], 6, fill=RED)
+        model.recursive_render(dc, c)
 
     surface.write_to_png('output.png')
 
