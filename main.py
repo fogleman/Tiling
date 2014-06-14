@@ -147,9 +147,33 @@ def main():
     dc.set_source_rgb(*color(BACKGROUND_COLOR))
     dc.paint()
 
-    pattern = 3
+    pattern = 6
 
-    if pattern == 0:
+    if pattern == 0: # 3.6.3.6
+        model = Model()
+        model.append(Shape(6))
+        a = model.add_all([0], range(6), 3)
+        b = model.add_all(a, [1], 6)
+        model.recursive_render(dc, b)
+
+    if pattern == 1: # 4.6.12
+        model = Model()
+        model.append(Shape(12, fill=RED))
+        a = model.add_all([0], range(0, 12, 2), 6, fill=ORANGE)
+        b = model.add_all([0], range(1, 12, 2), 4, fill=WHITE)
+        c = model.add_all(b, [2], 12, fill=RED)
+        model.recursive_render(dc, c)
+
+    if pattern == 2: # 3.3.4.3.4
+        model = Model()
+        model.append(Shape(4))
+        a = model.add_all([0], range(4), 3)
+        b = model.add_all(a, [1], 4)
+        c = model.add_all(b, [2, 3], 3)
+        d = model.add_all(c, [2], 4)
+        model.recursive_render(dc, d)
+
+    if pattern == 3: # 3.3.3.3.6
         model = Model()
         model.append(Shape(6, fill=RED))
         a = model.add_all([0], range(6), 3)
@@ -158,14 +182,14 @@ def main():
         d = model.add_all(c, [1], 6, fill=RED)
         model.recursive_render(dc, d)
 
-    if pattern == 1:
+    if pattern == 4: # 4.8.8
         model = Model()
         model.append(Shape(8, fill=RED))
         a = model.add_all([0], range(1, 8, 2), 4)
         b = model.add_all(a, [1], 8, fill=RED)
         model.recursive_render(dc, b)
 
-    if pattern == 2:
+    if pattern == 5: # 3.3.4.12 / 3.3.3.3.3.3
         model = Model()
         model.append(Shape(12, fill=RED))
         a = model.add_all([0], range(0, 12, 2), 3)
@@ -174,13 +198,22 @@ def main():
         d = model.add_all(b, [2], 12, fill=RED)
         model.recursive_render(dc, d)
 
-    if pattern == 3:
+    if pattern == 6: # 3.4.6.4
         model = Model()
         model.append(Shape(6, fill=RED))
         a = model.add_all([0], range(6), 4)
         b = model.add_all(a, [1], 3)
         c = model.add_all(a, [2], 6, fill=RED)
         model.recursive_render(dc, c)
+
+    if pattern == 7: # 3.3.4.4
+        model = Model()
+        model.append(Shape(4))
+        a = model.add_all([0], [0, 2], 4) + [0]
+        b = model.add_all(a, [1, 3], 3)
+        c = model.add_all(b, [1], 3)
+        d = model.add_all(c, [2], 4)
+        model.recursive_render(dc, d)
 
     surface.write_to_png('output.png')
 
