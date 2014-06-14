@@ -224,6 +224,15 @@ def main():
         b = model.add_all(a, [1, 2], 3)
         model.recursive_render(dc, b)
 
+    if pattern == 9:
+        model = Model()
+        model.append(Shape(5))
+        a = model.add_all([0], range(5), 4)
+        for i in range(8):
+            b = model.add_all(a, [2], 5)
+            a = model.add_all(b, [2], 4)
+        model.render(dc)
+
     surface.write_to_png('output.png')
 
 if __name__ == '__main__':
