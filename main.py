@@ -217,7 +217,7 @@ def main():
         d = model.add_all(c, [2], 4)
         model.recursive_render(dc, d)
 
-    if pattern == 8:
+    if pattern == 8: # 3.3.3.3.3.3
         model = Model()
         model.append(Shape(3))
         a = model.add_all([0], range(3), 3)
@@ -232,6 +232,18 @@ def main():
             b = model.add_all(a, [2], 5)
             a = model.add_all(b, [2], 4)
         model.render(dc)
+
+    if pattern == 10:
+        model = Model()
+        model.append(Shape(6, fill=RED))
+        a = model.add_all([0], range(6), 4)
+        b = model.add_all(a, [2], 3)
+        c = model.add_all(b, [1], 4)
+        d = model.add_all(b, [2], 4)
+        e = model.add_all(d, [2], 6, fill=RED)
+        model.add_all(a, [1], 3)
+        model.add_all(c, [1], 3)
+        model.recursive_render(dc, e)
 
     surface.write_to_png('output.png')
 
