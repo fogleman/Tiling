@@ -1,9 +1,8 @@
 from math import sin, cos, tan, pi, atan2
 import cairo
 
-DEPTH = 10
 MARGIN = 0.1
-SCALE = 32
+SCALE = 48
 SHOW_LABELS = False
 SIZE = 1024
 STROKE_COLOR = 0x313E4A
@@ -90,30 +89,42 @@ class Model(object):
         parent = self.shapes[index]
         shape = parent.adjacent(sides, edge, **kwargs)
         self.append(shape)
-    def render(self, dc, dx=0, dy=0):
+    def render(self, dc, x=0, y=0):
         dc.save()
-        dc.translate(dx, dy)
+        dc.translate(x, y)
         for index, shape in enumerate(self.shapes):
             shape.render(dc)
             if SHOW_LABELS:
                 shape.render_edge_labels(dc)
                 shape.render_label(dc, index)
         dc.restore()
-    def recursive_render(self, dc, indexes, depth, x=0, y=0, memo=None):
+    def _recursive_render(self, dc, indexes, x, y, depth, memo):
         if depth < 0:
             return
-        memo = memo or {}
-        key = (round(x, 3), round(y, 3))
+        key = (round(x, 6), round(y, 6))
         previous_depth = memo.get(key, -1)
         if previous_depth >= depth:
             return
-        memo[key] = max(depth, previous_depth)
-        if previous_depth < 0:
+        memo[key] = depth
+        if previous_depth == -1:
             self.render(dc, x, y)
         for index in indexes:
             shape = self.shapes[index]
-            self.recursive_render(
-                dc, indexes, depth - 1, x + shape.x, y + shape.y, memo)
+            self._recursive_render(
+                dc, indexes, x + shape.x, y + shape.y, depth - 1, memo)
+    def recursive_render(self, dc, indexes):
+        memo = {}
+        depth = 0
+        while True:
+            self._recursive_render(dc, indexes, 0, 0, depth, memo)
+            d = SIZE / 2.0 / SCALE
+            tl = any(x < -d and y < -d for x, y in memo)
+            tr = any(x > d and y < -d for x, y in memo)
+            bl = any(x < -d and y > d for x, y in memo)
+            br = any(x > d and y > d for x, y in memo)
+            if tl and tr and bl and br:
+                break
+            depth += 1
 
 def main():
     width = height = SIZE
@@ -140,7 +151,7 @@ def main():
             model.add(2 + i * 2, 2, 12, color=COLORS[2])
             model.add(2 + i * 2, 1, 3)
             model.add(2 + i * 2, 3, 3)
-        model.recursive_render(dc, range(13, 29, 3), DEPTH)
+        model.recursive_render(dc, range(13, 29, 3))
 
     elif pattern == 2:
         model = Model()
@@ -149,7 +160,7 @@ def main():
             model.add(0, i * 2 + 1, 4)
         for i in range(4):
             model.add(i + 1, 1, 8, color=COLORS[2])
-        model.recursive_render(dc, range(5, 9), DEPTH)
+        model.recursive_render(dc, range(5, 9))
 
     elif pattern == 3:
         model = Model()
@@ -162,7 +173,7 @@ def main():
             model.add(i + 7, 2, 4)
         for i in range(6):
             model.add(i + 13, 3, 6, color=COLORS[2])
-        model.recursive_render(dc, range(19, 25), DEPTH)
+        model.recursive_render(dc, range(19, 25))
 
     elif pattern == 4:
         model = Model()
@@ -174,7 +185,7 @@ def main():
             model.add(i + 1, 2, 3, color=COLORS[2])
         for i in range(6):
             model.add(i * 2 + 7, 2, 6, color=COLORS[0])
-        model.recursive_render(dc, range(19, 25), DEPTH)
+        model.recursive_render(dc, range(19, 25))
 
     surface.write_to_png('output.png')
 
