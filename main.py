@@ -27,7 +27,8 @@ class Shape(object):
         self.x = x
         self.y = y
         self.rotation = rotation
-        self.color = COLORS[(self.sides - 3) % len(COLORS)]
+        self.fill = COLORS[(self.sides - 3) % len(COLORS)]
+        self.stroke = STROKE_COLOR
         for key, value in kwargs.items():
             setattr(self, key, value)
     def points(self, scale=1, margin=0):
@@ -54,10 +55,10 @@ class Shape(object):
         dc.move_to(*points[0])
         for point in points[1:]:
             dc.line_to(*point)
-        dc.set_source_rgb(*color(self.color))
+        dc.set_source_rgb(*color(self.fill))
         dc.fill_preserve()
         if STROKE_WIDTH:
-            dc.set_source_rgb(*color(STROKE_COLOR))
+            dc.set_source_rgb(*color(self.stroke))
             dc.stroke_preserve()
         dc.new_path()
     def render_edge_labels(self, dc):
@@ -144,47 +145,47 @@ def main():
 
     if pattern == 1:
         model = Model()
-        model.append(Shape(12, color=COLORS[2]))
+        model.append(Shape(12, fill=0, stroke=0))
         for i in range(12):
             model.add(0, i, 3 + i % 2)
         for i in range(6):
-            model.add(2 + i * 2, 2, 12, color=COLORS[2])
+            model.add(2 + i * 2, 2, 12, fill=0, stroke=0)
             model.add(2 + i * 2, 1, 3)
             model.add(2 + i * 2, 3, 3)
         model.recursive_render(dc, range(13, 29, 3))
 
     elif pattern == 2:
         model = Model()
-        model.append(Shape(8, color=COLORS[2]))
+        model.append(Shape(8, fill=COLORS[2]))
         for i in range(4):
             model.add(0, i * 2 + 1, 4)
         for i in range(4):
-            model.add(i + 1, 1, 8, color=COLORS[2])
+            model.add(i + 1, 1, 8, fill=COLORS[2])
         model.recursive_render(dc, range(5, 9))
 
     elif pattern == 3:
         model = Model()
-        model.append(Shape(6, color=COLORS[2]))
+        model.append(Shape(6, fill=COLORS[2]))
         for i in range(6):
             model.add(0, i, 4)
         for i in range(6):
-            model.add(i + 1, 1, 3, color=COLORS[3])
+            model.add(i + 1, 1, 3, fill=COLORS[3])
         for i in range(6):
             model.add(i + 7, 2, 4)
         for i in range(6):
-            model.add(i + 13, 3, 6, color=COLORS[2])
+            model.add(i + 13, 3, 6, fill=COLORS[2])
         model.recursive_render(dc, range(19, 25))
 
     elif pattern == 4:
         model = Model()
-        model.append(Shape(6, color=COLORS[0]))
+        model.append(Shape(6, fill=COLORS[0]))
         for i in range(6):
-            model.add(0, i, 3, color=COLORS[2])
+            model.add(0, i, 3, fill=COLORS[2])
         for i in range(6):
-            model.add(i + 1, 1, 3, color=COLORS[2])
-            model.add(i + 1, 2, 3, color=COLORS[2])
+            model.add(i + 1, 1, 3, fill=COLORS[2])
+            model.add(i + 1, 2, 3, fill=COLORS[2])
         for i in range(6):
-            model.add(i * 2 + 7, 2, 6, color=COLORS[0])
+            model.add(i * 2 + 7, 2, 6, fill=COLORS[0])
         model.recursive_render(dc, range(19, 25))
 
     surface.write_to_png('output.png')
