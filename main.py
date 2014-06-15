@@ -26,6 +26,35 @@ def color(value):
 def normalize(x, y):
     return (round(x, 6), round(y, 6))
 
+def inset_corner(p1, p2, p3, margin):
+    x1, y1 = p1
+    x2, y2 = p2
+    x3, y3 = p3
+    a1 = atan2(y2 - y1, x2 - x1) - pi / 2
+    a2 = atan2(y3 - y2, x3 - x2) - pi / 2
+    ax1, ay1 = x1 + cos(a1) * margin, y1 + sin(a1) * margin
+    ax2, ay2 = x2 + cos(a1) * margin, y2 + sin(a1) * margin
+    bx1, by1 = x2 + cos(a2) * margin, y2 + sin(a2) * margin
+    bx2, by2 = x3 + cos(a2) * margin, y3 + sin(a2) * margin
+    ady, adx = ay2 - ay1, ax1 - ax2
+    bdy, bdx = by2 - by1, bx1 - bx2
+    c1 = ady * ax1 + adx * ay1
+    c2 = bdy * bx1 + bdx * by1
+    d = ady * bdx - bdy * adx
+    x = (bdx * c1 - adx * c2) / d
+    y = (ady * c2 - bdy * c1) / d
+    return (x, y)
+
+def inset_polygon(points, margin):
+    result = []
+    points = list(points)
+    points.insert(0, points[-2])
+    for p1, p2, p3 in zip(points, points[1:], points[2:]):
+        point = inset_corner(p3, p2, p1, margin)
+        result.append(point)
+    result.append(result[0])
+    return result
+
 class Shape(object):
     def __init__(self, sides, x=0, y=0, rotation=0, **kwargs):
         self.sides = sides
@@ -96,6 +125,7 @@ class DualShape(Shape):
         super(DualShape, self).__init__(len(points) - 1)
         self.data = points
     def points(self, margin=0):
+        return inset_polygon(self.data, margin)
         return self.data
 
 class Model(object):
