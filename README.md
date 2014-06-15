@@ -5,7 +5,7 @@ simple API.
 
 Scroll down for a tutorial. Here are some examples.
 
-![Sample](http://i.imgur.com/3anreFy.gif)
+![Sample](http://i.imgur.com/gyoQnuG.gif)
 
 ### Links
 
