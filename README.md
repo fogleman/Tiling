@@ -71,10 +71,10 @@ our template.
 ![Image](http://i.imgur.com/2HgeMRd.png)
 
 Now that we have positions for repeating the pattern, we can use the
-recursive_render function to automatically fill in the rest of the surface
+repeat function to automatically fill in the rest of the surface
 with our pattern.
 
-    model.recursive_render(dc, c)
+    model.repeat(c)
 
 ![Image](http://i.imgur.com/JC2MSwH.png)
 
@@ -85,7 +85,8 @@ Here's all the code needed for this pattern:
     a = model.add_all([0], range(6), 4)
     b = model.add_all(a, [1], 3)
     c = model.add_all(a, [2], 6, fill=RED)
-    model.recursive_render(dc, c)
+    model.repeat(c)
+    model.render(dc)
 
 Once finished, you can turn off the helper labels and adjust the scale as
 desired.
