@@ -1,6 +1,7 @@
 ## Tiling
 
-Quickly construct tilings of regular polygons using a simple API.
+Quickly construct tilings of regular polygons and their dual tilings using a
+simple API.
 
 Scroll down for a tutorial. Here are some examples.
 
@@ -90,5 +91,9 @@ Here's all the code needed for this pattern:
 
 Once finished, you can turn off the helper labels and adjust the scale as
 desired.
+
+Dual tilings can be created by setting `DUAL = True`. This setting renders
+polygons such that the vertices of the original tiling correspond to the
+faces of the dual tiling and vice-versa.
 
 ![Image](http://i.imgur.com/cOrQsXW.png)
