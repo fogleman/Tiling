@@ -4,7 +4,7 @@ Quickly construct tilings of regular polygons using a simple API.
 
 Scroll down for a tutorial. Here are some examples.
 
-![Sample](http://i.imgur.com/VgkrtDb.gif)
+![Sample](http://i.imgur.com/3anreFy.gif)
 
 ### Links
 

@@ -125,8 +125,10 @@ class DualShape(Shape):
         super(DualShape, self).__init__(len(points) - 1)
         self.data = points
     def points(self, margin=0):
-        return inset_polygon(self.data, margin)
-        return self.data
+        if margin == 0:
+            return self.data
+        else:
+            return inset_polygon(self.data, margin)
 
 class Model(object):
     def __init__(self):
