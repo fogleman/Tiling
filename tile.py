@@ -16,18 +16,16 @@ FILL_COLOR = 0x477984
 STROKE_COLOR = 0x313E4A
 
 def color(value):
-    r = ((value >> 16) & 0xff) / 255.0
-    g = ((value >> 8) & 0xff) / 255.0
-    b = ((value >> 0) & 0xff) / 255.0
+    r = ((value >> (8 * 2)) & 255) / 255.0
+    g = ((value >> (8 * 1)) & 255) / 255.0
+    b = ((value >> (8 * 0)) & 255) / 255.0
     return (r, g, b)
 
 def normalize(x, y):
     return (round(x, 6), round(y, 6))
 
 def inset_corner(p1, p2, p3, margin):
-    x1, y1 = p1
-    x2, y2 = p2
-    x3, y3 = p3
+    (x1, y1), (x2, y2), (x3, y3) = (p1, p2, p3)
     a1 = atan2(y2 - y1, x2 - x1) - pi / 2
     a2 = atan2(y3 - y2, x3 - x2) - pi / 2
     ax1, ay1 = x1 + cos(a1) * margin, y1 + sin(a1) * margin
@@ -48,7 +46,7 @@ def inset_polygon(points, margin):
     points = list(points)
     points.insert(0, points[-2])
     for p1, p2, p3 in zip(points, points[1:], points[2:]):
-        point = inset_corner(p3, p2, p1, margin)
+        point = inset_corner(p1, p2, p3, margin)
         result.append(point)
     result.append(result[0])
     return result
@@ -192,7 +190,7 @@ class Model(object):
                 continue
             def angle(shape):
                 return atan2(shape.y - y, shape.x - x)
-            shapes.sort(key=angle)
+            shapes.sort(key=angle, reverse=True)
             points = [(shape.x, shape.y) for shape in shapes]
             points.append(points[0])
             result.append(DualShape(points))
