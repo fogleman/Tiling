@@ -2,8 +2,9 @@ from math import sin, cos, tan, pi, atan2
 import cairo
 
 # Model() defaults
+WIDTH = 1024
+HEIGHT = 1024
 SCALE = 64
-SIZE = 1024
 
 # Model.render() defaults
 BACKGROUND_COLOR = 0x000000
@@ -125,8 +126,9 @@ class DualShape(Shape):
             return inset_polygon(self.data, margin)
 
 class Model(object):
-    def __init__(self, size=SIZE, scale=SCALE):
-        self.size = size
+    def __init__(self, width=WIDTH, height=HEIGHT, scale=SCALE):
+        self.width = width
+        self.height = height
         self.scale = scale
         self.shapes = []
         self.lookup = {}
@@ -170,11 +172,12 @@ class Model(object):
         depth = 0
         while True:
             self._repeat(indexes, 0, 0, depth, memo)
-            d = self.size / 2.0 / self.scale
-            tl = any(x < -d and y < -d for x, y in memo)
-            tr = any(x > d and y < -d for x, y in memo)
-            bl = any(x < -d and y > d for x, y in memo)
-            br = any(x > d and y > d for x, y in memo)
+            w = self.width / 2.0 / self.scale
+            h = self.height / 2.0 / self.scale
+            tl = any(x < -w and y < -h for x, y in memo)
+            tr = any(x > w and y < -h for x, y in memo)
+            bl = any(x < -w and y > h for x, y in memo)
+            br = any(x > w and y > h for x, y in memo)
             if tl and tr and bl and br:
                 break
             depth += 1
@@ -198,13 +201,14 @@ class Model(object):
     def render(
             self, dual=False, background_color=BACKGROUND_COLOR, margin=MARGIN,
             show_labels=SHOW_LABELS, line_width=LINE_WIDTH):
-        surface = cairo.ImageSurface(cairo.FORMAT_RGB24, self.size, self.size)
+        surface = cairo.ImageSurface(
+            cairo.FORMAT_RGB24, self.width, self.height)
         dc = cairo.Context(surface)
         dc.set_line_cap(cairo.LINE_CAP_ROUND)
         dc.set_line_join(cairo.LINE_JOIN_ROUND)
         dc.set_line_width(line_width)
         dc.set_font_size(18.0 / self.scale)
-        dc.translate(self.size / 2, self.size / 2)
+        dc.translate(self.width / 2, self.height / 2)
         dc.scale(self.scale, self.scale)
         dc.set_source_rgb(*color(background_color))
         dc.paint()
