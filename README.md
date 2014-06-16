@@ -107,8 +107,12 @@ Here's all the code needed for this pattern:
 Once finished, you can turn off the helper labels and adjust the scale as
 desired.
 
+![Image](http://i.imgur.com/cOrQsXW.png)
+
 Dual tilings can be created with `model.render(dual=True)`. This setting
 renders polygons such that the vertices of the original tiling correspond to
 the faces of the dual tiling and vice-versa.
 
-![Image](http://i.imgur.com/cOrQsXW.png)
+Here is the dual of the above pattern.
+
+![Image](http://i.imgur.com/BnIdKV2.png)
