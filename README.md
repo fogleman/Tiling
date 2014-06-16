@@ -19,6 +19,11 @@ http://en.wikipedia.org/wiki/List_of_uniform_tilings
 2. ???
 3. Profit!
 
+### Wallpaper
+
+* [16x9 Wallpaper](http://i.imgur.com/oerkmDS.png)
+* [16x10 Wallpaper](http://i.imgur.com/H28k39a.png)
+
 ### How To
 
 Here's a visual demonstration. See below for more details.
