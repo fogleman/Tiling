@@ -47,7 +47,7 @@ number of sides. Let's add a hexagon.
 
 At this point we can run the following code to render the model.
 
-    surface = model.render(dc)
+    surface = model.render()
 
 ![Image](http://i.imgur.com/OjV0HTb.png)
 
@@ -102,13 +102,13 @@ Here's all the code needed for this pattern:
     b = model.add_all(a, [1], 3)
     c = model.add_all(a, [2], 6, fill=RED)
     model.repeat(c)
-    model.render(dc)
+    surface = model.render()
 
 Once finished, you can turn off the helper labels and adjust the scale as
 desired.
 
-Dual tilings can be created with `render(dual=True)`. This setting renders
-polygons such that the vertices of the original tiling correspond to the
-faces of the dual tiling and vice-versa.
+Dual tilings can be created with `model.render(dual=True)`. This setting
+renders polygons such that the vertices of the original tiling correspond to
+the faces of the dual tiling and vice-versa.
 
 ![Image](http://i.imgur.com/cOrQsXW.png)
