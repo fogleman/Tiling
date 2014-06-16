@@ -15,7 +15,7 @@ http://en.wikipedia.org/wiki/List_of_uniform_tilings
 
 ### Motivation
 
-1. Write code that tiles polygons.
+1. Write polygon tiling code.
 2. ???
 3. Profit!
 
@@ -47,7 +47,7 @@ number of sides. Let's add a hexagon.
 
 At this point we can run the following code to render the model.
 
-    model.render(dc)
+    surface = model.render(dc)
 
 ![Image](http://i.imgur.com/OjV0HTb.png)
 
@@ -107,7 +107,7 @@ Here's all the code needed for this pattern:
 Once finished, you can turn off the helper labels and adjust the scale as
 desired.
 
-Dual tilings can be created by setting `DUAL = True`. This setting renders
+Dual tilings can be created with `render(dual=True)`. This setting renders
 polygons such that the vertices of the original tiling correspond to the
 faces of the dual tiling and vice-versa.
 
