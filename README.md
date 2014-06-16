@@ -25,6 +25,11 @@ Here's a visual demonstration. See below for more details.
 
 ![Demo](http://i.imgur.com/MHm6VuI.gif)
 
+[pycairo](http://cairographics.org/pycairo/) is used for rendering.
+Installation on OS X is easy using Homebrew.
+
+    brew install py2cairo
+
 Before creating a new pattern, set these flags to zoom in and label the
 polygons and their edges.
 
