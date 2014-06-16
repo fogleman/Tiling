@@ -335,6 +335,14 @@ def main(pattern):
         model.repeat(b)
         model.render(dc)
 
+    if pattern == 12: # 3.12.12
+        model = Model()
+        model.append(Shape(12))
+        a = model.add_all([0], range(0, 12, 2), 3)
+        b = model.add_all([0], range(1, 12, 2), 12)
+        model.repeat(b)
+        model.render(dc)
+
     surface.write_to_png('output.png')
 
 if __name__ == '__main__':
