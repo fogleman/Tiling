@@ -7,9 +7,9 @@ SIZE = 1024
 
 # Model.render() defaults
 BACKGROUND_COLOR = 0x000000
+LINE_WIDTH = 0.1
 MARGIN = 0.1
 SHOW_LABELS = False
-STROKE_WIDTH = 0.1
 
 # Shape() defaults
 FILL_COLOR = 0x477984
@@ -87,18 +87,15 @@ class Shape(object):
         y = y1 + (y2 - y1) / 2.0 + sin(b) * d
         a += angle * ((sides - 1) / 2)
         return Shape(sides, x, y, a, **kwargs)
-    def render(self, dc, margin, fill=True, stroke=True):
+    def render(self, dc, margin):
         points = self.points(margin)
         dc.move_to(*points[0])
         for point in points[1:]:
             dc.line_to(*point)
-        if fill:
-            dc.set_source_rgb(*color(self.fill))
-            dc.fill_preserve()
-        if stroke:
-            dc.set_source_rgb(*color(self.stroke))
-            dc.stroke_preserve()
-        dc.new_path()
+        dc.set_source_rgb(*color(self.fill))
+        dc.fill_preserve()
+        dc.set_source_rgb(*color(self.stroke))
+        dc.stroke()
     def render_edge_labels(self, dc):
         points = self.points(MARGIN - 0.25)
         for edge in range(self.sides):
@@ -202,12 +199,12 @@ class Model(object):
         return result
     def render(
             self, dual=False, background_color=BACKGROUND_COLOR, margin=MARGIN,
-            show_labels=SHOW_LABELS, stroke_width=STROKE_WIDTH):
+            show_labels=SHOW_LABELS, line_width=LINE_WIDTH):
         surface = cairo.ImageSurface(cairo.FORMAT_RGB24, self.size, self.size)
         dc = cairo.Context(surface)
         dc.set_line_cap(cairo.LINE_CAP_ROUND)
         dc.set_line_join(cairo.LINE_JOIN_ROUND)
-        dc.set_line_width(stroke_width)
+        dc.set_line_width(line_width)
         dc.set_font_size(18.0 / self.scale)
         dc.translate(self.size / 2, self.size / 2)
         dc.scale(self.scale, self.scale)
@@ -218,7 +215,7 @@ class Model(object):
             for shape in shapes:
                 shape.render_edge_labels(dc)
         for shape in shapes:
-            shape.render(dc, margin, stroke=bool(stroke_width))
+            shape.render(dc, margin)
         if show_labels:
             for index, shape in enumerate(self.shapes):
                 if shape in shapes:
