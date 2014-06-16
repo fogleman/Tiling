@@ -96,13 +96,16 @@ with our pattern.
 
 Here's all the code needed for this pattern:
 
+    from tile import Model, Shape
+    
     model = Model()
     model.append(Shape(6, fill=RED))
-    a = model.add_all([0], range(6), 4)
-    b = model.add_all(a, [1], 3)
+    a = model.add_all([0], range(6), 4, fill=ORANGE)
+    b = model.add_all(a, [1], 3, fill=BLUE)
     c = model.add_all(a, [2], 6, fill=RED)
     model.repeat(c)
     surface = model.render()
+    surface.write_to_png('output.png')
 
 Once finished, you can turn off the helper labels and adjust the scale as
 desired.
