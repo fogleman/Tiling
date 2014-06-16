@@ -204,10 +204,12 @@ class Model(object):
         if SHOW_LABELS:
             for shape in shapes:
                 shape.render_edge_labels(dc)
-        for index, shape in enumerate(shapes):
+        for shape in shapes:
             shape.render(dc)
-            if SHOW_LABELS:
-                shape.render_label(dc, index)
+        if SHOW_LABELS:
+            for index, shape in enumerate(self.shapes):
+                if shape in shapes:
+                    shape.render_label(dc, index)
 
 def main(pattern):
     surface = cairo.ImageSurface(cairo.FORMAT_RGB24, SIZE, SIZE)
