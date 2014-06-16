@@ -13,6 +13,12 @@ http://en.wikipedia.org/wiki/Tiling_by_regular_polygons
 
 http://en.wikipedia.org/wiki/List_of_uniform_tilings
 
+### Motivation
+
+1. Write code that tiles polygons.
+2. ???
+3. Profit!
+
 ### How To
 
 Here's a visual demonstration. See below for more details.
