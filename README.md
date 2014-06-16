@@ -53,14 +53,15 @@ number of sides. Let's add a hexagon.
 At this point we can run the following code to render the model.
 
     surface = model.render()
+    surface.write_to_png('output.png')
 
 ![Image](http://i.imgur.com/OjV0HTb.png)
 
 Now, let's add squares adjacent to all of the hexagon's edges.
 
-    a = model.add_all([0], range(6), 4)
+    a = model.add(0, range(6), 4)
 
-The first parameter, `[0]`, specifies which shapes we're attaching to. Here,
+The first parameter, `0`, specifies which shape(s) we're attaching to. Here,
 we're only attaching to one shape (the hexagon) and it was the first one
 created, so it's referred to by zero.
 
@@ -71,7 +72,7 @@ labeled in the output image.
 The third parameter, `4`, specifies the number of sides for the new shapes. In
 this case, squares.
 
-The return value of `add_all` tracks the indexes of the newly created squares
+The return value of `add` tracks the indexes of the newly created squares
 so we can refer to them later.
 
 ![Image](http://i.imgur.com/D0zqHkA.png)
@@ -80,14 +81,14 @@ Next comes the cool part. We can attach triangles to all of the squares we just
 created in one fell swoop by using the previous return value. Here, we are
 adding triangles to edge number 1 of each of those squares.
 
-    b = model.add_all(a, [1], 3)
+    b = model.add(a, 1, 3)
 
 ![Image](http://i.imgur.com/lfyfaC0.png)
 
 Now we'll add more hexagons which will represent the repeating positions of
 our template.
 
-    c = model.add_all(a, [2], 6)
+    c = model.add(a, 2, 6)
 
 ![Image](http://i.imgur.com/2HgeMRd.png)
 
@@ -105,9 +106,9 @@ Here's all the code needed for this pattern:
     
     model = Model()
     model.append(Shape(6, fill=RED))
-    a = model.add_all([0], range(6), 4, fill=ORANGE)
-    b = model.add_all(a, [1], 3, fill=BLUE)
-    c = model.add_all(a, [2], 6, fill=RED)
+    a = model.add(0, range(6), 4, fill=ORANGE)
+    b = model.add(a, 1, 3, fill=BLUE)
+    c = model.add(a, 2, 6, fill=RED)
     model.repeat(c)
     surface = model.render()
     surface.write_to_png('output.png')

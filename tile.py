@@ -95,8 +95,8 @@ class Shape(object):
         dc.fill_preserve()
         dc.set_source_rgb(*color(self.stroke))
         dc.stroke()
-    def render_edge_labels(self, dc):
-        points = self.points(MARGIN - 0.25)
+    def render_edge_labels(self, dc, margin):
+        points = self.points(margin)
         for edge in range(self.sides):
             (x1, y1), (x2, y2) = points[edge:edge + 2]
             text = str(edge)
@@ -136,15 +136,19 @@ class Model(object):
         self.shapes.append(shape)
         key = normalize(shape.x, shape.y)
         self.lookup[key] = shape
-    def add(self, index, edge, sides, **kwargs):
+    def _add(self, index, edge, sides, **kwargs):
         parent = self.shapes[index]
         shape = parent.adjacent(sides, edge, **kwargs)
         self.append(shape)
-    def add_all(self, indexes, edges, sides, **kwargs):
+    def add(self, indexes, edges, sides, **kwargs):
+        if isinstance(indexes, int):
+            indexes = [indexes]
+        if isinstance(edges, int):
+            edges = [edges]
         start = len(self.shapes)
         for index in indexes:
             for edge in edges:
-                self.add(index, edge, sides, **kwargs)
+                self._add(index, edge, sides, **kwargs)
         end = len(self.shapes)
         return range(start, end)
     def add_repeats(self, x, y):
@@ -215,7 +219,7 @@ class Model(object):
         shapes = self.dual() if dual else self.lookup.values()
         if show_labels:
             for shape in shapes:
-                shape.render_edge_labels(dc)
+                shape.render_edge_labels(dc, margin - 0.25)
         for shape in shapes:
             shape.render(dc, margin)
         if show_labels:
